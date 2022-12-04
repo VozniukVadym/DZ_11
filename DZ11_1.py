@@ -1,16 +1,21 @@
 import socket
-import time
 
-start_time=time.time()
-print(str(start_time))
-sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.bind(('127.0.0.1',55000))
-sock.listen(10)
-print('server is running')
+new_socket = socket.socket()
+
+new_socket.bind(('127.0.0.1', 55000))
+
+name = 'Server'
+
+new_socket.listen(1)
+
+conn, add = new_socket.accept()
+
+client = (conn.recv(1024)).decode()
+
+conn.send(name.encode())
 while True:
-    conn, addr=sock.accept()
-    print('connected: ', addr)
-    data = conn.recv(1024)
-    print(str(data))
-    conn.send(data.upper())
-conn.close()
+    message = input('Server : ')
+    conn.send(message.encode())
+    message = conn.recv(1024)
+    message = message.decode()
+    print(client, ':', message)
